@@ -1,0 +1,9 @@
+Momentan, am reusit sa construiesc un proces care functioneaza in fundal permanent si care inregistreaza toate modificarile facute de
+utilizatori asupra fisierul intr-un fisier de log
+Procesul il lansez acum de pe un script, maine voi incerca dupa cum am vazut intr-un model sa-l atasez la systemd ca acesta sa fie pornit
+odata cu masina virtuala
+De asemenea, m-am mai gandit la implementarea unui mecanism care sa stearga log-ul odata la o anumita perioada, pentru a nu incarca acest
+fisier foarte mult
+Am inceput si incercarea implementarii unui keylogger, dar acest lucru este ceva mai complex si mai am nevoie de cel putin o zi sau doua cred pentru a-l termina
+
+--nu am atasat inca niciun cod pentru ca nicio componenta nu este complet functionala asa cum ar trebui inca, voi mai atasa pe parcurs
