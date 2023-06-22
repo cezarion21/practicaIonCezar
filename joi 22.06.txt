@@ -1,0 +1,88 @@
+Am reusit sa fac sa functioneze capturarea comenzilor si a modificarii, crearii si stergerii fisierelor
+
+Capturarea activitatii o fac printr-un daemon:
+nohup inotifywait -m -r -e create,delete,move --timefmt "%H:%M:%S %Y-%m-%d" --format "$USER a efectuat %e pe %w%f|%T" -q -m "/home/$USER" > "$log_file" 2>&1 &
+
+O captura din fisierul de log pt fisiere:
+
+cezar a efectuat CREATE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/ls/usage-journal|13:06:40 2023-06-22
+cezar a efectuat DELETE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/ls/data.sqlite-journal|13:06:40 2023-06-22
+cezar a efectuat DELETE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/ls/usage-journal|13:06:40 2023-06-22
+cezar a efectuat DELETE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/idb/3166453069wcaw.sqlite-wal|13:06:56 2023-06-22
+cezar a efectuat CREATE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/idb/2181795718meogdaerlo-ts.sqlite-wal|13:07:17 2023-06-22
+cezar a efectuat CREATE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/idb/3166453069wcaw.sqlite-wal|13:07:17 2023-06-22
+cezar a efectuat CREATE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/datareporting/aborted-session-ping.tmp|13:07:22 2023-06-22
+cezar a efectuat DELETE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/datareporting/aborted-session-ping|13:07:22 2023-06-22
+cezar a efectuat MOVED_FROM pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/datareporting/aborted-session-ping.tmp|13:07:22 2023-06-22
+cezar a efectuat MOVED_TO pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/datareporting/aborted-session-ping|13:07:22 2023-06-22
+cezar a efectuat DELETE pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/storage/default/https+++web.whatsapp.com/idb/2181795718meogdaerlo-ts.sqlite-wal|13:07:29 2023-06-22
+cezar a efectuat MOVED_FROM pe /home/cezar/snap/firefox/common/.mozilla/firefox/87wv8dsa.default/sessionstore-backups/recovery.jsonlz4|13:07:34 2023-06-22
+
+Inregistrarea comenzilor am realizat-o prin adaugarea in ~/.bashrc a liniilor:
+
+log_ultima_comanda() {
+    echo "$(date "+%Y-%m-%d %H:%M:%S") - Utilizator: $USER - Comanda: $BASH_COMMAND" >> /home/cezar/practica/log_com
+}
+
+trap 'log_ultima_comanda' DEBUG
+
+PROMPT_COMMAND=''
+
+
+
+O captura din log-ul de comenzi:
+
+2023-06-22 11:20:05 - Utilizator: cezar - Comanda: cat log_com
+2023-06-22 11:20:26 - Utilizator: cezar - Comanda: ./notify
+2023-06-22 11:20:29 - Utilizator: cezar - Comanda: cat log_com
+2023-06-22 11:20:37 - Utilizator: cezar - Comanda: ps -elf
+2023-06-22 11:20:40 - Utilizator: cezar - Comanda: clear
+2023-06-22 11:20:45 - Utilizator: cezar - Comanda: cat log_com
+2023-06-22 11:21:02 - Utilizator: cezar - Comanda: su eric
+2023-06-22 11:21:42 - Utilizator: cezar - Comanda: cat log_com
+2023-06-22 11:21:45 - Utilizator: cezar - Comanda: clear
+2023-06-22 12:21:19 - Utilizator: cezar - Comanda: sudo apt install python
+2023-06-22 12:21:35 - Utilizator: cezar - Comanda: sudo apt install python3
+2023-06-22 12:21:49 - Utilizator: cezar - Comanda: python --version
+2023-06-22 12:21:56 - Utilizator: cezar - Comanda: python3 --version
+2023-06-22 12:21:59 - Utilizator: cezar - Comanda: clear
+2023-06-22 12:22:17 - Utilizator: cezar - Comanda: gedit keylogger.py
+2023-06-22 12:26:23 - Utilizator: cezar - Comanda: pip install evdev
+2023-06-22 12:26:37 - Utilizator: cezar - Comanda: apt install python3-pip
+2023-06-22 12:26:45 - Utilizator: cezar - Comanda: sudo apt install python3-pip
+2023-06-22 12:27:27 - Utilizator: cezar - Comanda: clear
+2023-06-22 12:27:33 - Utilizator: cezar - Comanda: cat log_com
+2023-06-22 12:27:57 - Utilizator: cezar - Comanda: pip install evdev
+2023-06-22 12:28:05 - Utilizator: cezar - Comanda: clear
+2023-06-22 12:28:13 - Utilizator: cezar - Comanda: gedit keylogger.py
+2023-06-22 12:29:31 - Utilizator: cezar - Comanda: python3 keylogger.py
+2023-06-22 12:34:19 - Utilizator: cezar - Comanda: gedit keylogger.py
+2023-06-22 12:34:46 - Utilizator: cezar - Comanda: touch input
+2023-06-22 12:34:48 - Utilizator: cezar - Comanda: ps
+2023-06-22 12:34:52 - Utilizator: cezar - Comanda: cat log
+2023-06-22 12:35:00 - Utilizator: cezar - Comanda: clear
+2023-06-22 12:35:09 - Utilizator: cezar - Comanda: python3 keylogger.py
+2023-06-22 12:57:56 - Utilizator: cezar - Comanda: gedit ~/bashrc
+2023-06-22 12:58:03 - Utilizator: cezar - Comanda: gedit ~/.bashrc
+2023-06-22 13:02:54 - Utilizator: cezar - Comanda: gedit notify
+2023-06-22 13:03:38 - Utilizator: cezar - Comanda: gedit log
+2023-06-22 13:04:00 - Utilizator: cezar - Comanda: echo -n > log
+2023-06-22 13:04:03 - Utilizator: cezar - Comanda: cat log
+2023-06-22 13:04:07 - Utilizator: cezar - Comanda: gedit log
+2023-06-22 13:04:24 - Utilizator: cezar - Comanda: touch f22
+2023-06-22 13:04:28 - Utilizator: cezar - Comanda: touch f33
+2023-06-22 13:04:31 - Utilizator: cezar - Comanda: touch f55
+2023-06-22 13:04:36 - Utilizator: cezar - Comanda: cat log
+2023-06-22 13:04:47 - Utilizator: cezar - Comanda: gedit log
+2023-06-22 13:10:16 - Utilizator: cezar - Comanda: PROMPT_COMMAND=''
+2023-06-22 13:10:27 - Utilizator: cezar - Comanda: cd practica
+2023-06-22 13:10:31 - Utilizator: cezar - Comanda: cat log
+2023-06-22 13:12:24 - Utilizator: cezar - Comanda: clear
+2023-06-22 13:12:59 - Utilizator: cezar - Comanda: gedit log_com
+
+
+
+
+
+
+
